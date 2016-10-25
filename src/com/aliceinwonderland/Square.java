@@ -7,9 +7,11 @@ public class Square {
     private Boolean isBomb = false;
     private Boolean isChecked = false;
     private Integer noBombsAround = 0;
+    private Boolean cheatMode = false;
 
     public Square(Boolean isBomb) {
         this.isBomb = isBomb;
+        this.cheatMode = CHEAT;
     }
 
     public Boolean getFlagged() {
@@ -37,7 +39,7 @@ public class Square {
     }
 
     public String getIdentifier() {
-        if (CHEAT) {
+        if (cheatMode) {
             if (isBomb) {
                 return "*";
             } else {
@@ -49,9 +51,11 @@ public class Square {
                     return "0" + noBombsAround;
                 }
             }
-        }
 
-        return ".";
+            return "~";
+        } else {
+            return ".";
+        }
     }
 
     public void setCloseBombs(int number) {

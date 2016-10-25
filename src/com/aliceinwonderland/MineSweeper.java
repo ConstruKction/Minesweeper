@@ -3,7 +3,7 @@ package com.aliceinwonderland;
 import java.util.Scanner;
 
 public class MineSweeper {
-    private Field field = new Field();
+    private Field field;
     private int boardSize = 0;
     private int bombChance = 0;
 
@@ -43,7 +43,8 @@ public class MineSweeper {
         scanner.close();
     }
 
-    public void play(Boolean cheat) {
-        field.printBoard(boardSize, cheat);
+    public void play() {
+        field = new Field(boardSize, bombChance);
+        field.printBoard();
     }
 }
