@@ -4,7 +4,7 @@ public class Square {
     protected Boolean isBomb = false;
     protected Boolean isFlagged = false;
     protected Boolean isChecked = false;
-    protected Integer noBombsAround = 0;
+    protected int noBombsAround = 0;
 
     public Boolean getFlagged() {
         return this.isFlagged;
@@ -30,16 +30,16 @@ public class Square {
         this.isChecked = true;
     }
 
-    public String getIdentifier(boolean cheat) {
+    public Character getIdentifier(boolean cheat) {
         if (cheat) {
-            return "~";
+            return '~';
         } else {
             if (this.isFlagged) {
-                return "*";
+                return '*';
             } else if (this.isChecked) {
-                return "0"; // TODO EXTRA: Recursive method
+                return ((char) ('0' + noBombsAround));
             }
-            return ".";
+            return '.';
         }
     }
 

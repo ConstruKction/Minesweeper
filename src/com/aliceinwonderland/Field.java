@@ -92,32 +92,56 @@ public class Field {
     }
 
     public Integer bombsNearby(int x, int y) {
-        // TODO: Check if bomb
-        int x_positions[] = { x - 1, x, x + 1 };
-        int y_positions[] = { y - 1, y, y + 1 };
-
         int noBombs = 0;
 
-        for (int i = 0; i < 3; i++) {
-            if (x_positions[i] < 0 || x_positions[i] > boardSize) { continue; }
+        // TODO: Use foreach instead of for
+        for (int i = -1; i < 2; i++) {
+            if (x + i < 0 || x + i >= boardSize) { continue; }
 
-            for (int j = 0; j < 3; j++) {
-                if (y_positions[j] < 1 || y_positions[j] > boardSize) { continue; }
+            // TODO: Use foreach instead of for
+            for (int j = -1; j < 2; j++) {
+                if (y + j < 1 || y + j >= boardSize) { continue; }
 
-                if (!(x_positions[i] == x && y_positions[j] == y)) {
-                    System.out.println(Helper.getIdentifier(x_positions[i], y_positions[j]));
+                if (!(i + i == x && y + j == y)) {
+                    Square square = squareHashMap.get(Helper.getIdentifier(x + i, y + j));
 
-                    Square square = squareHashMap.get(Helper.getIdentifier(x_positions[i], y_positions[j]));
                     if (square.isBomb) {
                         noBombs += 1;
                     } else if (!square.getChecked()) {
-                        int number = bombsNearby(x_positions[i], y_positions[j]);
+                        square.setChecked();
+                        int number = bombsNearby(x + i, y + j);
                         square.setCloseBombs(number);
-                        square.getChecked();
                     }
                 }
             }
         }
+
+//        Old recursive function StackOverflows
+//        int x_positions[] = { x - 1, x, x + 1 };
+//        int y_positions[] = { y - 1, y, y + 1 };
+//
+//        int noBombs = 0;
+//
+//        for (int i = 0; i < 3; i++) {
+//            if (x_positions[i] < 0 || x_positions[i] > boardSize) { continue; }
+//
+//            for (int j = 0; j < 3; j++) {
+//                if (y_positions[j] < 1 || y_positions[j] > boardSize) { continue; }
+//
+//                if (!(x_positions[i] == x && y_positions[j] == y)) {
+//                    System.out.println(Helper.getIdentifier(x_positions[i], y_positions[j]));
+//
+//                    Square square = squareHashMap.get(Helper.getIdentifier(x_positions[i], y_positions[j]));
+//                    if (square.isBomb) {
+//                        noBombs += 1;
+//                    } else if (!square.getChecked()) {
+//                        int number = bombsNearby(x_positions[i], y_positions[j]);
+//                        square.setCloseBombs(number);
+//                        square.getChecked();
+//                    }
+//                }
+//            }
+//        }
 
         return noBombs;
     }
@@ -133,6 +157,7 @@ public class Field {
         int bombsNearby = bombsNearby(Helper.charToInt(x), y);
 
         square.setCloseBombs(bombsNearby);
+        square.setChecked();
     }
 
     private void flagSquare(char x, int y) {

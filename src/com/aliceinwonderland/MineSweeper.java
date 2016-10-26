@@ -49,6 +49,7 @@ public class MineSweeper {
         while (isPlaying)
         {
             field.printBoard(false);
+            System.out.println();
             System.out.println("Please enter the location you want to check (prepend with '*' to flag): ");
 
             String playerInput;
@@ -56,5 +57,15 @@ public class MineSweeper {
 
             field.checkInput(playerInput.toUpperCase());
         }
+    }
+
+    public void gameOver() {
+        Main.wantsToPlay = false;
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Play again? Y/n");
+
+        String playerInput;
+        playerInput = scanner.next();
     }
 }

@@ -7,15 +7,15 @@ public class BombSquare extends Square {
         isBomb = true;
     }
 
-    public String getIdentifier(boolean cheat) {
+    public Character getIdentifier(boolean cheat) {
         if(cheat) {
-            return "*";
+            return '*';
         } else {
             if (this.isFlagged) {
-                return "*";
+                return '*';
             }
         }
 
-        return ".";
+        return '.';
     }
 }
