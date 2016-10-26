@@ -73,7 +73,7 @@ public class Field {
 
         char first = input.charAt(0);
         if (first == '*') {
-            input.substring(1);
+            input = input.substring(1);
             flag = true;
         }
 
@@ -91,6 +91,37 @@ public class Field {
         }
     }
 
+    public Integer bombsNearby(int x, int y) {
+        // TODO: Check if bomb
+        int x_positions[] = { x - 1, x, x + 1 };
+        int y_positions[] = { y - 1, y, y + 1 };
+
+        int noBombs = 0;
+
+        for (int i = 0; i < 3; i++) {
+            if (x_positions[i] < 0 || x_positions[i] > boardSize) { continue; }
+
+            for (int j = 0; j < 3; j++) {
+                if (y_positions[j] < 1 || y_positions[j] > boardSize) { continue; }
+
+                if (!(x_positions[i] == x && y_positions[j] == y)) {
+                    System.out.println(Helper.getIdentifier(x_positions[i], y_positions[j]));
+
+                    Square square = squareHashMap.get(Helper.getIdentifier(x_positions[i], y_positions[j]));
+                    if (square.isBomb) {
+                        noBombs += 1;
+                    } else if (!square.getChecked()) {
+                        int number = bombsNearby(x_positions[i], y_positions[j]);
+                        square.setCloseBombs(number);
+                        square.getChecked();
+                    }
+                }
+            }
+        }
+
+        return noBombs;
+    }
+
     private void hitSquare(char x, int y) {
         Square square = squareHashMap.get(Helper.getIdentifier(x, y));
 
@@ -98,6 +129,10 @@ public class Field {
             System.out.println("Ka-boom! Game over!");
             // TODO: Change playing state to false
         }
+
+        int bombsNearby = bombsNearby(Helper.charToInt(x), y);
+
+        square.setCloseBombs(bombsNearby);
     }
 
     private void flagSquare(char x, int y) {
@@ -113,10 +148,6 @@ public class Field {
             // TODO: Change playing state to false
             System.out.println("You've found all the bombs. Congratulations!");
         }
-    }
-
-    public void checkSquare() {
-        // TODO: Check if bomb
     }
 
     public Boolean bombsFound() {
