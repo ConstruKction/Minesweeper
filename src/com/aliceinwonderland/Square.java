@@ -1,10 +1,10 @@
 package com.aliceinwonderland;
 
 public class Square {
-    protected Boolean isBomb = false;
+    protected Boolean isMine = false;
     protected Boolean isFlagged = false;
     protected Boolean isChecked = false;
-    protected int noBombsAround = 0;
+    protected int noMinesAround = 0;
 
     public Boolean getFlagged() {
         return this.isFlagged;
@@ -14,12 +14,12 @@ public class Square {
         this.isFlagged = !this.isFlagged;
     }
 
-    public void addCloseBomb() {
-        this.noBombsAround += 1;
+    public void addCloseMine() {
+        this.noMinesAround += 1;
     }
 
-    public Boolean getBomb() {
-        return this.isBomb;
+    public Boolean getMine() {
+        return this.isMine;
     }
 
     public Boolean getChecked() {
@@ -37,13 +37,13 @@ public class Square {
             if (this.isFlagged) {
                 return '*';
             } else if (this.isChecked) {
-                return ((char) ('0' + noBombsAround));
+                return ((char) ('0' + noMinesAround));
             }
             return '.';
         }
     }
 
-    public void setCloseBombs(int number) {
-        this.noBombsAround = number;
+    public void setCloseMines(int number) {
+        this.noMinesAround = number;
     }
 }

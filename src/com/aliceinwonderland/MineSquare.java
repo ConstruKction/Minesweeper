@@ -1,14 +1,14 @@
 package com.aliceinwonderland;
 
-public class BombSquare extends Square {
+public class MineSquare extends Square {
 
-    public BombSquare()
+    public MineSquare()
     {
-        isBomb = true;
+        isMine = true;
     }
 
     public Character getIdentifier(boolean cheat) {
-        if(cheat) {
+        if (cheat) {
             return '*';
         } else {
             if (this.isFlagged) {
