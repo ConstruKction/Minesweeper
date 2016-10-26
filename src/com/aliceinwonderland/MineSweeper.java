@@ -6,6 +6,7 @@ public class MineSweeper {
     private Field field;
     private int boardSize = 0;
     private int bombChance = 0;
+    private boolean isPlaying = true;
 
     public MineSweeper() {
         boardSize = 0;
@@ -39,12 +40,21 @@ public class MineSweeper {
                 bombChance = inputBombChance;
             }
         }
-
-        scanner.close();
     }
 
     public void play() {
         field = new Field(boardSize, bombChance);
-        field.printBoard();
+        Scanner scanner = new Scanner(System.in);
+
+        while (isPlaying)
+        {
+            field.printBoard(false);
+            System.out.println("Please enter the location you want to check (prepend with '*' to flag): ");
+
+            String playerInput;
+            playerInput = scanner.next();
+
+            field.checkInput(playerInput.toUpperCase());
+        }
     }
 }
