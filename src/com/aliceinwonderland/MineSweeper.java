@@ -3,10 +3,10 @@ package com.aliceinwonderland;
 import java.util.Scanner;
 
 public class MineSweeper {
-    private Field field;
     private int boardSize = 0;
     private int bombChance = 0;
     private boolean isPlaying = true;
+    private Field field;
 
     public MineSweeper() {
         boardSize = 0;
@@ -55,17 +55,41 @@ public class MineSweeper {
             String playerInput;
             playerInput = scanner.next();
 
-            field.checkInput(playerInput.toUpperCase());
+            makeMove(playerInput.toUpperCase());
+
+            System.out.println("Play again? y/N");
+
+            String answer;
+            answer = scanner.next().toUpperCase();
+
+            if (!answer.equals("Y")) {
+                Main.wantsToPlay = false;
+                System.out.println("Hope you had a blast. Thanks and see you again soon.");
+                System.exit(0);
+            }
         }
     }
 
-    public void gameOver() {
-        Main.wantsToPlay = false;
+    private void makeMove(String input) {
+        boolean flag = false;
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Play again? Y/n");
+        char first = input.charAt(0);
+        if (first == '*') {
+            input = input.substring(1);
+            flag = true;
+        }
 
-        String playerInput;
-        playerInput = scanner.next();
+        if (!Field.squareHashMap.containsKey(input)) {
+            System.out.println("Sorry.");
+        }
+
+        char x = input.toUpperCase().charAt(0);
+        int y = Character.getNumericValue(input.charAt(1));
+
+        if (flag) {
+            field.flagSquare(x, y);
+        } else {
+            field.hitSquare(x, y);
+        }
     }
 }

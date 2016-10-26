@@ -11,7 +11,7 @@ public class Field {
     private int noBombs = 0;
     private int noBombsSelected = 0;
 
-    private HashMap<String, Square> squareHashMap = new HashMap<>();
+    public static HashMap<String, Square> squareHashMap = new HashMap<>();
 
     public Field(int boardSize, int bombChance) {
         this.boardSize = boardSize;
@@ -68,29 +68,6 @@ public class Field {
         printBoard(false);
     }
 
-    public void checkInput(String input) {
-        boolean flag = false;
-
-        char first = input.charAt(0);
-        if (first == '*') {
-            input = input.substring(1);
-            flag = true;
-        }
-
-        if (!squareHashMap.containsKey(input)) {
-            System.out.println("Sorry.");
-        }
-
-        char x = input.toUpperCase().charAt(0);
-        int y = Character.getNumericValue(input.charAt(1));
-
-        if (flag) {
-            flagSquare(x, y);
-        } else {
-            hitSquare(x, y);
-        }
-    }
-
     public Integer bombsNearby(int x, int y) {
         int noBombs = 0;
 
@@ -116,42 +93,15 @@ public class Field {
             }
         }
 
-//        Old recursive function StackOverflows
-//        int x_positions[] = { x - 1, x, x + 1 };
-//        int y_positions[] = { y - 1, y, y + 1 };
-//
-//        int noBombs = 0;
-//
-//        for (int i = 0; i < 3; i++) {
-//            if (x_positions[i] < 0 || x_positions[i] > boardSize) { continue; }
-//
-//            for (int j = 0; j < 3; j++) {
-//                if (y_positions[j] < 1 || y_positions[j] > boardSize) { continue; }
-//
-//                if (!(x_positions[i] == x && y_positions[j] == y)) {
-//                    System.out.println(Helper.getIdentifier(x_positions[i], y_positions[j]));
-//
-//                    Square square = squareHashMap.get(Helper.getIdentifier(x_positions[i], y_positions[j]));
-//                    if (square.isBomb) {
-//                        noBombs += 1;
-//                    } else if (!square.getChecked()) {
-//                        int number = bombsNearby(x_positions[i], y_positions[j]);
-//                        square.setCloseBombs(number);
-//                        square.getChecked();
-//                    }
-//                }
-//            }
-//        }
-
         return noBombs;
     }
 
-    private void hitSquare(char x, int y) {
+    public void hitSquare(char x, int y) {
         Square square = squareHashMap.get(Helper.getIdentifier(x, y));
 
         if (square.isBomb) {
-            System.out.println("Ka-boom! Game over!");
-            // TODO: Change playing state to false
+            System.out.println("You died.");
+            Main.wantsToPlay = false;
         }
 
         int bombsNearby = bombsNearby(Helper.charToInt(x), y);
@@ -160,7 +110,7 @@ public class Field {
         square.setChecked();
     }
 
-    private void flagSquare(char x, int y) {
+    public void flagSquare(char x, int y) {
         Square square = squareHashMap.get(Helper.getIdentifier(x, y));
 
         if (square.isBomb) {
@@ -170,7 +120,7 @@ public class Field {
         square.toggleFlagged();
 
         if (noBombs == noBombsSelected) {
-            // TODO: Change playing state to false
+            Main.wantsToPlay = false;
             System.out.println("You've found all the bombs. Congratulations!");
         }
     }
