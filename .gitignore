@@ -14,5 +14,8 @@ hs_err_pid*
 # IntelliJ Stuff
 /.idea/
 /out/
-*.iml
 *.iws
+/.project
+/.classpath
+*.eml
+*.userlibraries

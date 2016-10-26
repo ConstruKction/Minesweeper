@@ -56,21 +56,14 @@ public class Field {
         }
     }
 
-    public void printBoard()
-    {
-        printBoard(false);
-    }
-
-    public Integer minesNearby(int x, int y) {
+    private Integer minesNearby(int x, int y) {
         int noMines = 0;
 
-        // TODO: Use foreach instead of for
         for (int i = -1; i < 2; i++) {
             if (x + i < 0 || x + i >= boardSize) { continue; }
 
-            // TODO: Use foreach instead of for
             for (int j = -1; j < 2; j++) {
-                if (y + j < 1 || y + j >= boardSize) { continue; }
+                if (y + j < 1 || y + j > boardSize) { continue; }
 
                 if (!(i + i == x && y + j == y)) {
                     Square square = squareHashMap.get(Helper.getIdentifier(x + i, y + j));
@@ -118,9 +111,5 @@ public class Field {
             MineSweeper.isPlaying = false;
             System.out.println("You've found all the mines. Congratulations!");
         }
-    }
-
-    public Boolean minesFound() {
-        return false;
     }
 }

@@ -14,14 +14,6 @@ public class Square {
         this.isFlagged = !this.isFlagged;
     }
 
-    public void addCloseMine() {
-        this.noMinesAround += 1;
-    }
-
-    public Boolean getMine() {
-        return this.isMine;
-    }
-
     public Boolean getChecked() {
         return this.isChecked;
     }

@@ -1,5 +1,6 @@
 package com.aliceinwonderland;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MineSweeper {
@@ -18,26 +19,36 @@ public class MineSweeper {
         while (boardSize < 5 || boardSize > 20) {
             System.out.println("Please tell me how large you'd like your board to be? (5-20): ");
 
-            int inputBoardSize;
-            inputBoardSize = scanner.nextInt();
+            try {
+                int inputBoardSize;
+                inputBoardSize = scanner.nextInt();
 
-            if (inputBoardSize < 5 || inputBoardSize > 20) {
-                System.out.println("*** The size must be between 5 and 20! ***");
-            } else {
-                boardSize = inputBoardSize;
+                if (inputBoardSize < 5 || inputBoardSize > 20) {
+                    System.out.println("*** The size must be between 5 and 20! ***");
+                } else {
+                    boardSize = inputBoardSize;
+                }
+            } catch (InputMismatchException e) {
+                scanner.next();
+                System.out.println("Invalid input.");
             }
         }
 
         while (mineChance < 10 || boardSize > 25) {
             System.out.println("Mine chance percentage will determine the difficulty of the game. (10-25): ");
 
-            int inputMineChance;
-            inputMineChance = scanner.nextInt();
+            try {
+                int inputMineChance;
+                inputMineChance = scanner.nextInt();
 
-            if (inputMineChance < 10 || inputMineChance > 25) {
-                System.out.println("*** The mine chance percentage must be between 10% and 25%! ***");
-            } else {
-                mineChance = inputMineChance;
+                if (inputMineChance < 10 || inputMineChance > 25) {
+                    System.out.println("*** The mine chance percentage must be between 10% and 25%! ***");
+                } else {
+                    mineChance = inputMineChance;
+                }
+            } catch (InputMismatchException e) {
+                scanner.next();
+                System.out.println("Invalid input.");
             }
         }
     }
@@ -85,15 +96,15 @@ public class MineSweeper {
 
         if (!Field.squareHashMap.containsKey(input)) {
             System.out.println("Sorry.");
-        }
-
-        char x = input.toUpperCase().charAt(0);
-        int y = Character.getNumericValue(input.charAt(1));
-
-        if (flag) {
-            field.flagSquare(x, y);
         } else {
-            field.hitSquare(x, y);
+            char x = input.toUpperCase().charAt(0);
+            int y = Character.getNumericValue(input.charAt(1));
+
+            if (flag) {
+                field.flagSquare(x, y);
+            } else {
+                field.hitSquare(x, y);
+            }
         }
     }
 }
