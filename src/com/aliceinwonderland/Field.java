@@ -60,10 +60,14 @@ public class Field {
         int noMines = 0;
 
         for (int i = -1; i < 2; i++) {
-            if (x + i < 0 || x + i >= boardSize) { continue; }
+            if (x + i < 0 || x + i >= boardSize) {
+                continue;
+            }
 
             for (int j = -1; j < 2; j++) {
-                if (y + j < 1 || y + j > boardSize) { continue; }
+                if (y + j < 1 || y + j > boardSize) {
+                    continue;
+                }
 
                 if (!(i + i == x && y + j == y)) {
                     Square square = squareHashMap.get(Helper.getIdentifier(x + i, y + j));
@@ -74,6 +78,8 @@ public class Field {
                         square.setChecked();
                         int number = minesNearby(x + i, y + j);
                         square.setCloseMines(number);
+                    } else {
+                        break;
                     }
                 }
             }
