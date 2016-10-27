@@ -95,10 +95,10 @@ public class MineSweeper {
         }
 
         if (!Field.squareHashMap.containsKey(input)) {
-            System.out.println("Sorry.");
+            System.out.println("Invalid input.");
         } else {
             char x = input.toUpperCase().charAt(0);
-            int y = Character.getNumericValue(input.charAt(1));
+            int y = Integer.parseInt(input.replaceAll("\\D+", ""));
 
             if (flag) {
                 field.flagSquare(x, y);
