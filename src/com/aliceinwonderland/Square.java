@@ -4,6 +4,7 @@ public class Square {
     protected Boolean isMine = false;
     protected Boolean isFlagged = false;
     protected Boolean isChecked = false;
+
     protected int noMinesAround = 0;
 
     public Boolean getFlagged() {

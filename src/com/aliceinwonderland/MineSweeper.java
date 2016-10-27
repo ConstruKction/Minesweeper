@@ -6,7 +6,10 @@ import java.util.Scanner;
 public class MineSweeper {
     private int boardSize = 0;
     private int mineChance = 0;
+
     public static boolean isPlaying = true;
+    public static boolean firstMove = true;
+
     private Field field;
 
     public MineSweeper() {
@@ -81,6 +84,7 @@ public class MineSweeper {
             System.exit(0);
         } else {
             Main.wantsToPlay = true;
+            firstMove = true;
             isPlaying = true;
         }
     }

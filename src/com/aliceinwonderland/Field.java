@@ -7,6 +7,7 @@ import static com.aliceinwonderland.Main.CHEAT;
 
 public class Field {
     private final int boardSize;
+    private final int minesChance;
 
     private int noMines = 0;
     private int noMinesSelected = 0;
@@ -15,6 +16,7 @@ public class Field {
 
     public Field(int boardSize, int minesChance) {
         this.boardSize = boardSize;
+        this.minesChance = minesChance;
 
         for (int y = 0; y < boardSize; y++) {
             for (int x = 0; x < boardSize; x++) {
@@ -74,10 +76,12 @@ public class Field {
 
                     if (square.isMine) {
                         noMines += 1;
+                        break;
                     } else if (!square.getChecked()) {
                         square.setChecked();
                         int number = minesNearby(x + i, y + j);
                         square.setCloseMines(number);
+                        break;
                     } else {
                         break;
                     }
@@ -91,7 +95,10 @@ public class Field {
     public void hitSquare(char x, int y) {
         Square square = squareHashMap.get(Helper.getIdentifier(x, y));
 
-        if (square.isMine) {
+        if (square.isMine && MineSweeper.firstMove) {
+            new Field(boardSize, minesChance);
+            MineSweeper.firstMove = false;
+        } else if (square.isMine) {
             System.out.println("You died.");
             Main.wantsToPlay = false;
             MineSweeper.isPlaying = false;
@@ -101,6 +108,8 @@ public class Field {
 
         square.setCloseMines(minesNearby);
         square.setChecked();
+
+        MineSweeper.firstMove = false;
     }
 
     public void flagSquare(char x, int y) {
