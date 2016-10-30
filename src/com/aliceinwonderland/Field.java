@@ -1,5 +1,7 @@
 package com.aliceinwonderland;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -18,7 +20,7 @@ public class Field {
         this.boardSize = boardSize;
         this.minesChance = minesChance;
 
-        for (int y = 0; y < boardSize; y++) {
+        for (int y = 1; y <= boardSize; y++) {
             for (int x = 0; x < boardSize; x++) {
                 boolean isMine = false;
                 if (new Random().nextInt(100) + 1 <= minesChance) {
@@ -26,9 +28,57 @@ public class Field {
                     noMines += 1;
                 }
 
-                squareHashMap.put(Helper.getIdentifier(x, y + 1), isMine ? new MineSquare() : new Square());
+                squareHashMap.put(Helper.getIdentifier(x, y), isMine ? new MineSquare() : new Square());
             }
         }
+
+        connectMines();
+    }
+
+    private void connectMines() {
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 1; j < boardSize; j++) {
+                String key = Helper.getIdentifier(i, j);
+
+                if (!squareHashMap.containsKey(key)) {
+                    continue;
+                }
+
+                Square square = squareHashMap.get(key);
+
+                int noMines = 0;
+
+                for (String newKey : getSurroundingFields(i, j)) {
+                    Square newSquare = squareHashMap.get(newKey);
+
+                    if (newSquare.isMine) {
+                        noMines++;
+                    }
+                }
+
+                square.setCloseMines(noMines);
+            }
+        }
+    }
+
+    private ArrayList<String> getSurroundingFields(int x, int y) {
+        ArrayList<String> fields = new ArrayList<>();
+
+        for (int i = -1; i < 2; i++) {
+            if (x + i < 0) continue;
+
+            for (int j = -1; j < 2; j++) {
+                if (y + j < 0) continue;
+
+                String key = Helper.getIdentifier(x + i, y + j);
+
+                if (!squareHashMap.containsKey(key)) continue;
+
+                fields.add(key);
+            }
+        }
+
+        return fields;
     }
 
     public void printBoard(boolean cheatMode) {
@@ -58,38 +108,35 @@ public class Field {
         }
     }
 
-    private Integer minesNearby(int x, int y) {
-        int noMines = 0;
+    private void hitConnections(int x, int y) {
+        String originalKey = Helper.getIdentifier(x, y);
 
+        // Selects the row
         for (int i = -1; i < 2; i++) {
-            if (x + i < 0 || x + i >= boardSize) {
-                continue;
-            }
+            if (x + i < 0) continue;
 
+            // Selects field
             for (int j = -1; j < 2; j++) {
-                if (y + j < 1 || y + j > boardSize) {
-                    continue;
-                }
+                if (y + j < 0) continue;
 
-                if (!(i + i == x && y + j == y)) {
-                    Square square = squareHashMap.get(Helper.getIdentifier(x + i, y + j));
+                // Makes the new coordinate
+                String key = Helper.getIdentifier(x + i, y + j);
 
-                    if (square.isMine) {
-                        noMines += 1;
-                        break;
-                    } else if (!square.getChecked()) {
-                        square.setChecked();
-                        int number = minesNearby(x + i, y + j);
-                        square.setCloseMines(number);
-                        break;
-                    } else {
-                        break;
+                if (squareHashMap.containsKey(key)) {
+                    Square square = squareHashMap.get(key);
+
+                    // Checks if there are no bombs around
+                    // Checks if the field is not already checked
+                    // Compare the given input with the new coordinate
+                    if (square.noMinesAround == 0 && !square.isChecked && !originalKey.equals(key)) {
+                        // If above conditions are met, checks surrounding fields of new field
+                        hitConnections(x + i, y + j);
                     }
+
+                    square.setChecked();
                 }
             }
         }
-
-        return noMines;
     }
 
     public void hitSquare(char x, int y) {
@@ -104,10 +151,11 @@ public class Field {
             MineSweeper.isPlaying = false;
         }
 
-        int minesNearby = minesNearby(Helper.charToInt(x), y);
-
-        square.setCloseMines(minesNearby);
-        square.setChecked();
+        if (square.noMinesAround == 0) {
+            hitConnections(Helper.charToInt(x), y);
+        } else {
+            square.setChecked();
+        }
 
         MineSweeper.firstMove = false;
     }
