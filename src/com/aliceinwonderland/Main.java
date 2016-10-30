@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
         while (wantsToPlay) {
             MineSweeper mineSweeper = new MineSweeper();
-            mineSweeper.play();
+            wantsToPlay = mineSweeper.play();
         }
     }
 }

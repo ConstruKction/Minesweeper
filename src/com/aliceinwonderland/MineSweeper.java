@@ -56,7 +56,7 @@ public class MineSweeper {
         }
     }
 
-    public void play() {
+    public Boolean play() {
         field = new Field(boardSize, mineChance);
         Scanner scanner = new Scanner(System.in);
 
@@ -79,13 +79,12 @@ public class MineSweeper {
         answer = scanner.next().toUpperCase();
 
         if (!answer.equals("Y")) {
-            Main.wantsToPlay = false;
             System.out.println("Hope you had a blast. Thanks and see you again soon.");
-            System.exit(0);
+            return false;
         } else {
-            Main.wantsToPlay = true;
             firstMove = true;
             isPlaying = true;
+            return true;
         }
     }
 
